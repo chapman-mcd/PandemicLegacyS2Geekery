@@ -19,6 +19,7 @@ infection_rate = {
     10:5
     }
 
+
 num_of_epidemics = { 
     30:5,
     31:5,
