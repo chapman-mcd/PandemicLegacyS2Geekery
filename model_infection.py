@@ -145,7 +145,6 @@ draw_contents = {
 total_epidemics = num_of_epidemics[draw_contents['upgrade_city'] + draw_contents['normal_city']]
 
 
-
 ######################################################
 # Setup the Decks
 ######################################################
