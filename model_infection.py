@@ -18,8 +18,7 @@ infection_rate = {
     10:5
     }
 
-
-num_of_epidemics = { 
+num_of_epidemics = {
     30:5,
     31:5,
     32:5,
@@ -31,7 +30,7 @@ num_of_epidemics = {
     38:6,
     39:6,
     40:6,
-    41:6, 
+    41:6,
     42:6,
     43:6,
     44:6,
@@ -54,7 +53,7 @@ num_of_epidemics = {
     61:9,
     62:9,
     63:10,
-    64:10, 
+    64:10,
     65:10,
     66:10,
     67:10,
@@ -68,6 +67,9 @@ num_of_epidemics = {
     75:10,
     76:10
     }
+
+## TODO: turn into a variable value
+#cards_per_epidemic = 6
 
 initial_draw = 9 #infection draw
 initial_player_cards = 8 # num of players times 2
@@ -138,7 +140,7 @@ draw_contents = {
     'upgrade_city': 9,
     'normal_city': 46,
     'non-city': 13
-    }             
+    }
 
 total_epidemics = num_of_epidemics[draw_contents['upgrade_city'] + draw_contents['normal_city']]
 
@@ -154,12 +156,12 @@ hollow_men_added = {}
 population_lost = {}
 
 for city,num_cards in infection_cities.items():
-    
+
     #Set initial values
     cubes_lost[city] = 0
     hollow_men_added[city] = 0
     population_lost[city] = 0
-    
+
     while num_cards > 0:
         draw_deck.append(city)
         num_cards -= 1
@@ -176,7 +178,7 @@ for city,num_cards in infection_non_cities.items():
     while num_cards > 0:
         discard_deck.append(city)
         num_cards -= 1
-        
+
 print(discard_deck)
 
 player_deck = []
@@ -221,21 +223,21 @@ player_deck = player_deck + init_player_deck
 print(player_deck)
 print(player_discard)
 
-        
+
 ######################################################
 # Initial Infection
 ######################################################
 
 def drawCards(num_cards):
-    
-    cards_drawn = 0 
+
+    cards_drawn = 0
 
     hollow_men_found = False
 
     while cards_drawn < num_cards:
         drawn_card = draw_deck.pop()
         discard_deck.append(drawn_card)
-        
+
         print('Card Drawn:' + drawn_card)
 
         if drawn_card == 'hollow men':
@@ -252,7 +254,7 @@ def drawCards(num_cards):
             print('Found a city - no hollow men')
             cubes_lost[drawn_card] += 1
             cards_drawn += 1
-      
+
 #print draw_deck
 #print discard_deck
 #print hollow_men_added
@@ -286,13 +288,13 @@ def endTurn():
         discard_deck = []
         drawCards(infection_rate[epidemic_count])
         epidemic_count += 1
-        
+
         #print draw_deck
         #print discard_deck
         #print hollow_men_added
         #print population_lost
         #print cubes_lost
-        
+
     player_drawn += 2
 
 active_turn = 0
@@ -300,7 +302,7 @@ active_turn = 0
 while active_turn < turns_to_simulate:
     endTurn()
     active_turn += 1
-    
+
 
 print(draw_deck)
 print(discard_deck)
