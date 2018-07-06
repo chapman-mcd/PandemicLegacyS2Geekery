@@ -1,0 +1,51 @@
+Epidemic,7
+Produce Supplies x3,2
+Produce Supplies x2,2
+Produce Supplies x1,4
+Portable Antiviral Lab,3
+New York (normal),3
+London (normal),4
+Washington (normal),2
+Chicago (normal),2
+Paris,2
+Atlanta,1
+Denver,2
+San Francisco,1
+Johannesburg,1
+St Petersburg,1
+Frankfurt,0
+Tripoli (normal),4
+Istanbul (normal),4
+Cairo (normal),4
+Antanarivo,2
+Moscow,1
+Baghdad,2
+Tehran,0
+New Mumbai,0
+Delhi,0
+Kolkata,0
+Sao Paolo (normal),3
+Lagos (normal),4
+Jacksonville (normal),2
+Mexico City,1
+Los Angeles,1
+Buenos Aires,2
+Bogota,2
+Lima,1
+Santiago,1
+Kinshasa,1
+Dar Es Salaam,2
+Khartoum,1
+Airlift,0
+Team Bravo,0
+Res Pop,0
+One Quiet Night,0
+Drastic Measures,0
+Data Transfer,0
+Extended Forecast,0
+Dispersal,0
+Decontamination Kit,0
+Relocation,0
+Hidden Stockpile,0
+Strategic Reserves,1
+Topaz Exp. Vaccine,1

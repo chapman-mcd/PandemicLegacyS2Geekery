@@ -2,7 +2,7 @@
 Define the classes for game execution and typical game variables
 """
 
-import DeckClasses
+from DeckClasses import *
 
 class PandemicGame(object):
     '''
@@ -27,11 +27,11 @@ class PandemicGame(object):
         Set variables that will be needed throughout the game and for reporting.
         Then initialize the two decks and perform the start of game setup
         '''
-        mode_name = model_name
-        game_number = game_number
+        self.model_name = model_name
+        self.game_number = game_number
 
         #Setup standard game variables
-        infection_rate = {
+        self.infection_rate = {
             0: 2,
             1: 2,
             2: 2,
@@ -45,7 +45,7 @@ class PandemicGame(object):
             10: 5
         }
 
-        num_of_epidemics = {
+        self.num_of_epidemics = {
             30: 5,
             31: 5,
             32: 5,
@@ -94,14 +94,14 @@ class PandemicGame(object):
             75: 10,
             76: 10
         }
-        epidemics_drawn = 0
+        self.epidemics_drawn = 0
 
-        initial_infection_draw = 9
-        initial_player_draw = 8
+        self.initial_infection_draw = 9
+        self.initial_player_draw = 8
 
-        turns_to_report = [5, 10, 15, 20, 25, 30, 35]
+        self.turns_to_report = [5, 10, 15, 20, 25, 30, 35]
 
-        list_of_cities = [
+        self.list_of_cities = [
             'new york',
             'washington',
             'london',
@@ -130,16 +130,15 @@ class PandemicGame(object):
         ]
 
         #Create the two decks
-        infection_deck = PandemicDeck(input_inf_deck)
+        self.infection_deck = InfectionDeck(input_inf_deck)
         number_of_epidemics = len(input_player_deck)
-        player_deck = PandemicDeck(input_player_deck)
+        self.player_deck = PlayerDeck(input_player_deck)
 
         #Draw initial cards
-        for i in range(initial_player_draw):
-            player_deck.drawtop()
+        self.player_deck.setup(self.initial_player_draw)
 
-        for i in range(initial_infection_draw):
-            infection_deck.drawtop()
+        for i in range(self.initial_infection_draw):
+            self.infection_deck.draw_top()
 
     def end_turn(self):
         '''
@@ -148,14 +147,12 @@ class PandemicGame(object):
         '''
 
         for i in ranage(2):
-            card = player_deck.drawtop()
-            if card = 'epidemic':
+            card = player_deck.draw_top()
+            if card = 'Epidemic':
                 #Increase
                 epidemics_drawn += 1
-                #Infect
-                infection_deck.drawbottom()
-                #Intensify
-                infection_deck.shuffle_discard_on_top()
+                #Infect and Intensify
+                infection_deck.epidemic()
 
         keep_cards = 0
         while keep_cards < range(infection_rate[epidemics_drawn]):
