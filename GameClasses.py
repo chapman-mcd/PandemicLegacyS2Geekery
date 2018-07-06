@@ -5,7 +5,7 @@ Define the classes for game execution and typical game variables
 from DeckClasses import *
 
 class PandemicGame(object):
-    '''
+    """
     This class represents one playthrough of a Pandemic Legacy Season2 game in order to model the effect of different
     setups for the game decks.  Games will play through the turns and report the status at various intervals.  They will
     also track a couple key events
@@ -15,23 +15,62 @@ class PandemicGame(object):
     The game will then run a number of "turns". After each "turn", the game will check status.
 
     After a set condition, the game will "end" and report the final status and variables
-    '''
+    """
 
-    def __init__(self,model_name,game_number,input_inf_deck,input_player_deck):
-        '''
-        :param model_name: the name used when printing reports
-        :param game_number: the number used when printing reports
-        :param input_inf_deck: the cards to be used in the infection deck
-        :param input_player_deck: the cards to be used in the player deck
+    def __init__(self, model_name, game_number, input_inf_deck, input_player_deck, initial_player_draw=8,
+                 special_cards=[], searchable_cards=[]):
+        """
+        Initializes the game.  Sets up tracking variables and the decks.
+        
+        :param model_name: string, refers to what test is being run
+        :param game_number: integer, number of the current game
+        :param input_inf_deck: list of cards to be used to generate the infection deck
+        :param input_player_deck: dictionary of cards for the player deck.  key, value = card, quantity
+        :param initial_player_draw: integer, number of cards in player hands at start of game
+        :param special_cards: list of cards to be tracked as 'special'
+        :param searchable_cards: list of cards to be tracked as searchable
+        """
 
-        Set variables that will be needed throughout the game and for reporting.
-        Then initialize the two decks and perform the start of game setup
-        '''
+        # Store all the delicious variables we just got passed
         self.model_name = model_name
         self.game_number = game_number
+        self.special_cards = special_cards
+        self.searchable_cards = searchable_cards
+        self.initial_player_draw = initial_player_draw
 
-        #Setup standard game variables
-        self.infection_rate = {
+        #Create the two decks
+        self.infection_deck = InfectionDeck(input_inf_deck)
+        self.player_deck = PlayerDeck(input_player_deck)
+
+        # Setup standard game variables
+        self.initial_infection_draw = 9
+        self.current_infection_level = 0
+
+        # Set up tracking variables
+        self.searchable_cards_drawn = 0
+        self.special_cards_drawn = 0
+        self.time_to_8_cubes_above_pop = None
+        # Epidemic timing - a dictionary.  key, value = # of Epidemics, # of turns to draw that number of Epidemics
+        # Numbers not reached are None
+        self.epidemic_timing = {}
+        for i in range(10):
+            self.epidemic_timing[i+1] = None
+        self.epidemics_drawn = 0
+        self.total_cubes_removed = 0
+        self.total_cubes_removed_above_population = 0
+        self.total_hollow_men_dropped = 0
+        self.total_hollow_men_population_loss = 0
+        self.cubes_removed_by_city = {}
+        self.hollow_men_dropped_by_city = {}
+        self.hollow_men_pop_loss_by_city = {}
+
+        for city in self.infection_deck.get_unique_values():
+            self.cubes_removed_by_city[city] = 0
+            self.hollow_men_dropped_by_city[city] = 0
+            self.hollow_men_pop_loss_by_city[city] = 0
+
+        # Set up standard reference variables
+        self.infection_rate_lookup = {
             0: 2,
             1: 2,
             2: 2,
@@ -45,100 +84,20 @@ class PandemicGame(object):
             10: 5
         }
 
-        self.num_of_epidemics = {
-            30: 5,
-            31: 5,
-            32: 5,
-            33: 5,
-            34: 5,
-            35: 5,
-            36: 5,
-            37: 6,
-            38: 6,
-            39: 6,
-            40: 6,
-            41: 6,
-            42: 6,
-            43: 6,
-            44: 6,
-            45: 7,
-            46: 7,
-            47: 7,
-            48: 7,
-            49: 7,
-            50: 7,
-            51: 7,
-            52: 8,
-            53: 8,
-            54: 8,
-            55: 8,
-            56: 8,
-            57: 8,
-            58: 9,
-            59: 9,
-            60: 9,
-            61: 9,
-            62: 9,
-            63: 10,
-            64: 10,
-            65: 10,
-            66: 10,
-            67: 10,
-            68: 10,
-            69: 10,
-            70: 10,
-            71: 10,
-            72: 10,
-            73: 10,
-            74: 10,
-            75: 10,
-            76: 10
-        }
-        self.epidemics_drawn = 0
-
-        self.initial_infection_draw = 9
-        self.initial_player_draw = 8
-
-        self.turns_to_report = [5, 10, 15, 20, 25, 30, 35]
-
-        self.list_of_cities = [
-            'new york',
-            'washington',
-            'london',
-            'chicago',
-            'denver',
-            'san francisco',
-            'atlanta',
-            'paris',
-            'st petersburg',
-            'johannesburg',
-            'sao paolo',
-            'jacksonville',
-            'lagos',
-            'mexico city',
-            'los angeles',
-            'buenos aires',
-            'bogota',
-            'santiago',
-            'lima',
-            'dar es salaam',
-            'istanbul',
-            'tripoli',
-            'antanarivo',
-            'moscow',
-            'baghdad'
-        ]
-
-        #Create the two decks
-        self.infection_deck = InfectionDeck(input_inf_deck)
-        number_of_epidemics = len(input_player_deck)
-        self.player_deck = PlayerDeck(input_player_deck)
-
         #Draw initial cards
-        self.player_deck.setup(self.initial_player_draw)
+        initial_draw = self.player_deck.setup(self.initial_player_draw)
+
+        for card in initial_draw:
+            if card in self.searchable_cards:
+                self.searchable_cards_drawn += 1
+            elif card in self.special_cards:
+                self.special_cards_drawn += 1
 
         for i in range(self.initial_infection_draw):
-            self.infection_deck.draw_top()
+            card = self.infection_deck.draw_top()
+            if not card == 'Chicago':
+                self.total_cubes_removed += 1
+                self.cubes_removed_by_city[card] += 1
 
     def end_turn(self):
         '''
