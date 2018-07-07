@@ -31,16 +31,18 @@ turn_out_file = 'TurnResults.csv'
 game_out_file = 'GameResults.csv'
 
 #Open output files:
-city_file = open(city_out_file)
-turn_file = open(turn_out_file)
-game_file = open(game_out_file)
+city_file = open(city_out_file, 'w')
+turn_file = open(turn_out_file, 'w')
+game_file = open(game_out_file, 'w')
 
 #Print headers for the CSV files
 city_header = 'Model Name,Run Number,Turn Number,Data,'
 for city in list_of_cities:
     city_header += city + ','
+city_header += 'Total'
 city_header = city_header.lstrip(',')
 city_header = city_header.strip(',')
+city_header += '\n'
 city_file.write(city_header)
 
 turn_header = 'Model Name,Run Number,Turn Number,'
@@ -48,6 +50,7 @@ for key in report_by_turn_keys:
     turn_header += key + ','
 turn_header = turn_header.lstrip(',')
 turn_header = turn_header.strip(',')
+turn_header += '\n'
 turn_file.write(turn_header)
 
 game_header = 'Model Name, Run Number,'
@@ -55,27 +58,9 @@ for key in report_by_game_keys:
     game_header += key + ','
 game_header = game_header.strip(',')
 game_header = game_header.lstrip(',')
+game_header += '\n'
 game_file.write(game_header)
 
-
-"""
-Execute Games
-Baseline game should be our exact game settings at this point and represent Late June game
-"""
-model_name_1 = 'Baseline'
-infection_deck_1 = 'InfectionDeck.txt''
-player_deck_1 = 'PlayerDeck.txt''
-execute_game(model_name_1, infection_deck_1, player_deck_1)
-
-model_name_2 = 'Baseline - no hollow men'
-infection_deck_2 = 'InfectionDeckNoHollowMen.txt'
-player_deck_2 = 'PlayerDeck.txt'
-execute_game(model_name_2, infection_deck_2, player_deck_2)
-
-#Close Output Files
-city_file.close()
-turn_file.close()
-game_file.close()
 
 # Game Procs
 def execute_game(model_name, infection_deck_path, player_deck_path):
@@ -107,7 +92,7 @@ def execute_game(model_name, infection_deck_path, player_deck_path):
             try:
                 p.end_turn()
             except GameOverError:
-                game_end_found = 0
+                game_end_found = 1
 
             if turn_number in turns_to_report:
                 record_turn_results(model_name, game_num, turn_number, p.status_report())
@@ -146,35 +131,37 @@ def record_turn_results(model_name, game_num, turn_number, status_dict):
 
         printstr = ''
         printstr += model_name + ','
-        printstr += game_num + ','
-        printstr += turn_number + ','
+        printstr += str(game_num) + ','
+        printstr += str(turn_number) + ','
         printstr += key + ','
 
         report_sum = 0
 
         report = status_dict.get(key,{})
         for city in list_of_cities:
-            entry = report[key].get(city, 0)
+            entry = report.get(key,{}).get(city, 0)
             report_sum += entry
-            printstr += entry + ','
+            printstr += str(entry) + ','
 
-        printstr += report_sum
+        printstr += str(report_sum)
         printstr = printstr.strip(',')
         printstr = printstr.lstrip(',')
+        printstr += '\n'
 
         city_file.write(printstr)
 
     print_turnstr = ''
     print_turnstr += model_name + ','
-    print_turnstr += game_num + ','
-    print_turnstr += turn_number + ','
+    print_turnstr += str(game_num) + ','
+    print_turnstr += str(turn_number) + ','
 
     for key in report_by_turn_keys:
         entry = status_dict.get(key,0)
         print_turnstr += str(entry) + ','
 
-    printstr = print_turnstr.strip(',')
-    printstr = print_turnstr.lstrip(',')
+    print_turnstr = print_turnstr.strip(',')
+    print_turnstr = print_turnstr.lstrip(',')
+    print_turnstr += '\n'
 
     turn_file.write(print_turnstr)
 
@@ -204,14 +191,35 @@ def record_game_results(model_name, game_num, status_dict):
 
     print_gamestr = ''
     print_gamestr += model_name + ','
-    print_gamestr += game_num + ','
-    print_gamestr += status_dict.get('turns_to_8_cubes_above_pop','N/A') + ','
+    print_gamestr += str(game_num) + ','
+    print_gamestr += str(status_dict.get('turns_to_8_cubes_above_pop','N/A')) + ','
 
     epidemic_dict = status_dict.get('epidemic_timing', {})
     for epidemic_num in range(10):
-        print_gamestr += epidemic_dict.get(epidemic_num, 'N/A') + ','
+        print_gamestr += str(epidemic_dict.get(epidemic_num, 'N/A')) + ','
 
-    printstr = print_gamestr.strip(',')
-    printstr = print_gamestr.lstrip(',')
+    print_gamestr = print_gamestr.strip(',')
+    print_gamestr = print_gamestr.lstrip(',')
+    print_gamestr += '\n'
 
     game_file.write(print_gamestr)
+
+
+"""
+Execute Games
+Baseline game should be our exact game settings at this point and represent Late June game
+"""
+model_name_1 = 'Baseline'
+infection_deck_1 = 'InfectionDeck.txt'
+player_deck_1 = 'Player Deck.txt'
+execute_game(model_name_1, infection_deck_1, player_deck_1)
+
+model_name_2 = 'Baseline - no hollow men'
+infection_deck_2 = 'InfectionDeckNoHollowMen.txt'
+player_deck_2 = 'Player Deck.txt'
+execute_game(model_name_2, infection_deck_2, player_deck_2)
+
+#Close Output Files
+city_file.close()
+turn_file.close()
+game_file.close()
