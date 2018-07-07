@@ -1,4 +1,4 @@
-Epidemic,8
+Epidemic,7
 Produce Supplies x3,2
 Produce Supplies x2,2
 Produce Supplies x1,4
@@ -32,10 +32,10 @@ Los Angeles,1
 Buenos Aires,2
 Bogota,2
 Lima,1
-Santiago,1
-Kinshasa,1
-Dar Es Salaam,2
-Khartoum,1
+Santiago,0
+Kinshasa,0
+Dar Es Salaam,0
+Khartoum,0
 Airlift,0
 Team Bravo,0
 Res Pop,0

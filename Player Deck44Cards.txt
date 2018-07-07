@@ -1,4 +1,4 @@
-Epidemic,8
+Epidemic,7
 Produce Supplies x3,2
 Produce Supplies x2,2
 Produce Supplies x1,4
@@ -26,16 +26,16 @@ Delhi,0
 Kolkata,0
 Sao Paolo (normal),3
 Lagos (normal),4
-Jacksonville (normal),2
-Mexico City,1
-Los Angeles,1
-Buenos Aires,2
-Bogota,2
-Lima,1
-Santiago,1
-Kinshasa,1
-Dar Es Salaam,2
-Khartoum,1
+Jacksonville (normal),1
+Mexico City,0
+Los Angeles,0
+Buenos Aires,0
+Bogota,0
+Lima,0
+Santiago,0
+Kinshasa,0
+Dar Es Salaam,0
+Khartoum,0
 Airlift,0
 Team Bravo,0
 Res Pop,0
