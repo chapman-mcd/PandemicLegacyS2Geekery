@@ -1,4 +1,5 @@
-from DeckClasses import *
+
+from GameClasses import *
 
 f = open('InfectionDeck.txt')
 InfectionDeckList = f.read().splitlines()
@@ -13,6 +14,9 @@ for line in f.read().splitlines():
 infection = InfectionDeck(InfectionDeckList)
 
 player = PlayerDeck(PlayerDeckList)
+
+g = PandemicGame('testing',1,InfectionDeckList,PlayerDeckList,8)
+print(g.status_report())
 
 for i in range(10):
     print(infection.draw_top())
