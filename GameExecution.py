@@ -8,7 +8,7 @@ from GameClasses import *
 """
 General Settings
 """
-games_to_run = 100
+games_to_run = 1000
 #To report all turns - good for debugging
 #turns_to_report = range(100)
 #To report every 5 turns - better to reduce file size
@@ -216,11 +216,61 @@ model_name_1 = 'Baseline'
 infection_deck_1 = 'InfectionDeck.txt'
 player_deck_1 = 'Player Deck.txt'
 execute_game(model_name_1, infection_deck_1, player_deck_1)
+print('Finished Game #1')
 
 model_name_2 = 'Baseline - no hollow men'
 infection_deck_2 = 'InfectionDeckNoHollowMen.txt'
 player_deck_2 = 'Player Deck.txt'
 execute_game(model_name_2, infection_deck_2, player_deck_2)
+print('Finished Game #2')
+
+model_name_3 = 'No Three Card Cities'
+infection_deck_3 = 'InfectionDeckNoThrees.txt'
+player_deck_3 = 'Player Deck.txt'
+execute_game(model_name_3, infection_deck_3, player_deck_3)
+print('Finished Game #3')
+
+model_name_4 = 'No One Card Cities'
+infection_deck_4 = 'InfectionDeckNoOnes.txt'
+player_deck_4 = 'Player Deck.txt'
+execute_game(model_name_4, infection_deck_4, player_deck_4)
+print('Finished Game #4')
+
+model_name_5 = '36 City Cards'
+infection_deck_5 = 'InfectionDeck.txt'
+player_deck_5 = 'Player Deck36Cards.txt'
+execute_game(model_name_5, infection_deck_5, player_deck_5)
+print('Finished Game #5')
+
+model_name_6 = '37 City Cards'
+infection_deck_6 = 'InfectionDeck.txt'
+player_deck_6 = 'Player Deck37Cards.txt'
+execute_game(model_name_6, infection_deck_6, player_deck_6)
+print('Finished Game #6')
+
+model_name_7 = '44 City Cards'
+infection_deck_7 = 'InfectionDeck.txt'
+player_deck_7 = 'Player Deck44Cards.txt'
+execute_game(model_name_7, infection_deck_7, player_deck_7)
+print('Finished Game #7')
+
+model_name_8 = '45 City Cards'
+infection_deck_8 = 'InfectionDeck.txt'
+player_deck_8 = 'Player Deck45Cards.txt'
+execute_game(model_name_8, infection_deck_8, player_deck_8)
+print('Finished Game #8')
+
+model_name_9 = '52 City Cards'
+infection_deck_9 = 'InfectionDeck.txt'
+player_deck_9 = 'Player Deck52Cards.txt'
+execute_game(model_name_9, infection_deck_9, player_deck_9)
+print('Finished Game #9')
+
+model_name_10 = '53 City Cards'
+infection_deck_10 = 'InfectionDeck.txt'
+player_deck_10 = 'Player Deck53Cards.txt'
+execute_game(model_name_10, infection_deck_10, player_deck_10)
+print('Finished Game #10')
 
 #Close Output Files
 city_file.close()
