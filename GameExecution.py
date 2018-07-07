@@ -14,11 +14,11 @@ games_to_run = 1000
 #To report every 5 turns - better to reduce file size
 turns_to_report = range(5, 100, 5)
 
-list_of_cities = ['new york','washington','london','chicago','denver',
-    'san francisco','atlanta','paris','st petersburg','johannesburg',
-    'sao paolo','jacksonville','lagos','mexico city','los angeles',
-    'buenos aires','bogota','santiago','lima','dar es salaam','istanbul',
-    'tripoli','antanarivo','moscow','baghdad']
+list_of_cities = ['New York','Washington','London','Chicago','Denver',
+    'San Francisco','Atlanta','Paris','St Petersburg','Johannesburg',
+    'Sao Paolo','Jacksonville','Lagos','Mexico City','Los Angeles',
+    'Buenos Aires','Bogota','Santiago','Lima','Dar Es Salaam','Istanbul',
+    'Tripoli','Antanarivo','Moscow','Baghdad']
 
 report_by_turn_keys = ['total_cubes_removed', 'total_cubes_removed_above_pop', 'total_hollow_men_dropped',
                        'total_hollow_men_pop_loss', 'unique_cities_with_hollow_men', 'special_player_cards_drawn'
@@ -93,7 +93,7 @@ def execute_game(model_name, infection_deck_path, player_deck_path):
 
         while game_end_found == 0:
             try:
-                p.end_turn()
+                p.take_turn()
             except GameOverError:
                 game_end_found = 1
 
@@ -142,7 +142,7 @@ def record_turn_results(model_name, game_num, turn_number, status_dict):
 
         report = status_dict.get(key,{})
         for city in list_of_cities:
-            entry = report.get(key,{}).get(city, 0)
+            entry = report.get(city, 0)
             report_sum += entry
             printstr += str(entry) + ','
 
