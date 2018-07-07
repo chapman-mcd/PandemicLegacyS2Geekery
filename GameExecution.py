@@ -9,7 +9,10 @@ from GameClasses import *
 General Settings
 """
 games_to_run = 100
-turns_to_report = range(100)
+#To report all turns - good for debugging
+#turns_to_report = range(100)
+#To report every 5 turns - better to reduce file size
+turns_to_report = range(5, 100, 5)
 
 list_of_cities = ['new york','washington','london','chicago','denver',
     'san francisco','atlanta','paris','st petersburg','johannesburg',
@@ -18,7 +21,7 @@ list_of_cities = ['new york','washington','london','chicago','denver',
     'tripoli','antanarivo','moscow','baghdad']
 
 report_by_turn_keys = ['total_cubes_removed', 'total_cubes_removed_above_pop', 'total_hollow_men_dropped',
-                       'total_hollow_men_pop_loss','unique_cities_with_hollow_men','special_player_cards_drawn'
+                       'total_hollow_men_pop_loss', 'unique_cities_with_hollow_men', 'special_player_cards_drawn'
                        'searchable_player_cards_drawn', 'epidemics_drawn']
 
 report_by_game_keys = ['time to 8 cubes above pop', '1st epidemic turn', '2nd epidemic turn',
