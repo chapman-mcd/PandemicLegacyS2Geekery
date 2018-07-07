@@ -1,6 +1,6 @@
 import random
 from collections import Counter
-
+import copy
 
 class GameOverError(Exception):
     def __init__(self, message):
@@ -23,8 +23,8 @@ class PandemicDeck(object):
         :param deck: a list of strings, representing the cards in the deck.  Multiples of the same card are represented
         by identical strings in the list.
         """
-        self.deck = deck
-        self.drawpile = self.deck
+        self.deck = copy.deepcopy(deck)
+        self.drawpile = copy.deepcopy(self.deck)
         self.discardpile = []
         # generate a tuple of the unique values in the deck (useful for plotting, etc)
         unique_values_in_deck = []
@@ -137,7 +137,7 @@ class PlayerDeck(PandemicDeck):
         Initializes the player deck.  Populates the decks, but does not initialize.  Must use setup method.
         :param deck: a dictionary.  key,value pairs are cardname, quantity.
         """
-        self.deck = deck
+        self.deck = copy.deepcopy(deck)
         self.drawpile = []
         self.discardpile = []
         # build the deck and shuffle the non-epidemic cards

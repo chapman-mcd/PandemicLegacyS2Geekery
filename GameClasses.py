@@ -45,6 +45,7 @@ class PandemicGame(object):
         self.initial_infection_draw = 9
         self.current_infection_level = 0
         self.turn_number = 0
+        self.total_cards_drawn = 0
 
         # Set up tracking variables
         self.searchable_cards_drawn = 0
@@ -87,7 +88,7 @@ class PandemicGame(object):
         for card in initial_draw:
             if card in self.searchable_cards:
                 self.searchable_cards_drawn += 1
-            elif card in self.special_cards:
+            if card in self.special_cards:
                 self.special_cards_drawn += 1
 
         for i in range(self.initial_infection_draw):
@@ -151,26 +152,110 @@ class PandemicGame(object):
 
         return report
 
+    def track_removed_cubes(self, city):
+        """
+        Tracks removed cubes, including cubes removed above the # of cards in the infection deck
+        :param city: the city card in the infection deck to be removed
+        :return: nothing
+        """
 
-    def end_turn(self):
-        '''
-        At the end of each turn, two player cards get drawn, then draw infection cards up to the infection fate
-        return the number of player cards remaining
-        '''
+        # remove the cube
+        if not city == 'Chicago':
+            self.cubes_removed_by_city[city] += 1
 
-        for i in ranage(2):
-            card = player_deck.draw_top()
+        # check if this puts it above the # of cards in the infection deck
+        if self.cubes_removed_by_city[city] > self.infection_deck.get_deck_counts()[city]:
+            self.total_cubes_removed_above_pop += 1
+
+        # if this puts us at 8 cubes removed, write down the current turn
+        if self.total_cubes_removed_above_pop == 8:
+            self.turns_to_8_cubes_above_pop = self.turn_number
+
+    def track_hollow_men_added(self, city):
+        """
+        Tracks hollow men figures added, including ones that cause population loss.
+        :param city: the city cards in the infection deck that needs more hollow men
+        :return: nothing
+        """
+
+        # add the hollow man
+        self.hollow_men_dropped_by_city[city] += 1
+
+
+        # check if this causes population loss
+        # if this is the first one, it causes pop loss
+        if self.hollow_men_dropped_by_city[city] == 1:
+            self.hollow_men_pop_loss_by_city[city] += 1
+        # if this is more than the third, it causes pop loss
+        elif self.hollow_men_dropped_by_city[city] > 3:
+            self.hollow_men_pop_loss_by_city[city] += 1
+
+    def take_turn(self):
+        """
+        Takes a pandemic turn:
+            Draws and tracks player cards, resolving epidemics.
+            Flips infection cards, removinc cubes or adding hollow men as necessary.
+        :return: nothing
+        """
+
+        self.turn_number += 1
+        # draws the two player cards
+        for i in range(2):
+            self.total_cards_drawn += 1
+            # no need to wrap this card draw in a try/catch block.  If this deck is out, then the game is over
+            # and the GameOverError should be raised to the game handler.
+            card = self.player_deck.draw_top()
             if card == 'Epidemic':
-                #Increase
-                epidemics_drawn += 1
-                #Infect and Intensify
-                infection_deck.epidemic()
+                # Track this
+                self.epidemics_drawn +=1
+                self.epidemic_timing[self.epidemics_drawn] = self.turn_number
+                # Increase
+                self.current_infection_level += 1
+                # Infect and Intensify
+                # wrap in a try block in case we are out of cards.
+                try:
+                    infectioncard = self.infection_deck.epidemic()
+                    # Hollow Men cards are ignored during epidemics, so don't remove cubes if they come up now.
+                    if not infectioncard == 'Hollow Men':
+                        self.track_removed_cubes(infectioncard)
+                # in the extremely rare case that the infection deck is empty when the epidemic is drawn
+                # i don't think this scenario is even in the rules - increase infection level by 1 and then shuffle
+                # ignoring the draw 1 card in this case
+                except GameOverError:
+                    self.current_infection_level += 1
+                    self.infection_deck.shuffle_discard_on_top()
+            if card in self.special_cards:
+                self.special_cards_drawn += 1
+            if card in self.searchable_cards:
+                self.searchable_cards_drawn += 1
 
-        keep_cards = 0
-        while keep_cards < range(infection_rate[epidemics_drawn]):
-            card = infection_deck.drawtop()
-            if card != 'hollow men':
-                keep_card += 1
+        # flips the infection cards
+        cards_to_draw = self.infection_rate_lookup[self.current_infection_level]
+        hollow_men_inbound = False
+        for i in range(cards_to_draw):
+            # use try in case we are out of cards.
+            # if we are out of cards, increase infection rate by 1, shuffle discard on top, and draw again
+            try:
+                card = self.infection_deck.draw_top()
+            except GameOverError:
+                self.infection_deck.shuffle_discard_on_top()
+                self.current_infection_level += 1
+                card = self.infection_deck.draw_top()
+
+            # if the hollow men are inbound, then add a hollow man as long as this is not another hollow men card
+            # and set hollow_men_inbound back to false
+            if hollow_men_inbound == True:
+                if not card == 'Hollow Men':
+                    self.track_hollow_men_added(card)
+                    hollow_men_inbound = False
+            # if the hollow men are not already in bound
+            else:
+                # if this is a hollow men card, set them to inbound and continue
+                if card == 'Hollow Men':
+                    hollow_men_inbound = True
+                # if the hollow men are not inbound and this isn't a hollow men card, track the removed cubes
+                else:
+                    self.track_removed_cubes(card)
 
 
 
