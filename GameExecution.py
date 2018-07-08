@@ -21,7 +21,7 @@ list_of_cities = ['New York','Washington','London','Chicago','Denver',
     'Tripoli','Antanarivo','Moscow','Baghdad']
 
 report_by_turn_keys = ['total_cubes_removed', 'total_cubes_removed_above_pop', 'total_hollow_men_dropped',
-                       'total_hollow_men_pop_loss', 'unique_cities_with_hollow_men', 'special_player_cards_drawn'
+                       'total_hollow_men_pop_loss', 'unique_cities_with_hollow_men', 'special_player_cards_drawn',
                        'searchable_player_cards_drawn', 'epidemics_drawn']
 
 report_by_game_keys = ['time to 8 cubes above pop', '1st epidemic turn', '2nd epidemic turn',
@@ -81,7 +81,7 @@ def execute_game(model_name, infection_deck_path, player_deck_path):
         inf_file.close()
 
         player_deck = {}
-        player_file = open('Player Deck.txt')
+        player_file = open(player_deck_path)
         for line in player_file.read().splitlines():
             # second element is the number of cards
             player_deck[line.split(',')[0]] = line.split(',')[1]
@@ -198,7 +198,7 @@ def record_game_results(model_name, game_num, status_dict):
     print_gamestr += str(status_dict.get('turns_to_8_cubes_above_pop','N/A')) + ','
 
     epidemic_dict = status_dict.get('epidemic_timing', {})
-    for epidemic_num in range(10):
+    for epidemic_num in range(1,10,1):
         print_gamestr += str(epidemic_dict.get(epidemic_num, 'N/A')) + ','
 
     print_gamestr = print_gamestr.strip(',')
@@ -264,13 +264,13 @@ model_name_9 = '52 City Cards'
 infection_deck_9 = 'InfectionDeck.txt'
 player_deck_9 = 'Player Deck52Cards.txt'
 execute_game(model_name_9, infection_deck_9, player_deck_9)
-print('Finished Game #9')
+print('Finished Model #9')
 
 model_name_10 = '53 City Cards'
 infection_deck_10 = 'InfectionDeck.txt'
 player_deck_10 = 'Player Deck53Cards.txt'
 execute_game(model_name_10, infection_deck_10, player_deck_10)
-print('Finished Game #10')
+print('Finished Model #10')
 
 #Close Output Files
 city_file.close()
