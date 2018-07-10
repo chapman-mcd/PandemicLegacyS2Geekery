@@ -21,7 +21,7 @@ list_of_cities = ['New York','Washington','London','Chicago','Denver',
     'Tripoli','Antanarivo','Moscow','Baghdad']
 
 report_by_turn_keys = ['total_cubes_removed', 'total_cubes_removed_above_pop', 'total_hollow_men_dropped',
-                       'total_hollow_men_pop_loss', 'unique_cities_with_hollow_men', 'special_player_cards_drawn'
+                       'total_hollow_men_pop_loss', 'unique_cities_with_hollow_men', 'special_player_cards_drawn',
                        'searchable_player_cards_drawn', 'epidemics_drawn']
 
 report_by_game_keys = ['time to 8 cubes above pop', '1st epidemic turn', '2nd epidemic turn',
@@ -81,7 +81,7 @@ def execute_game(model_name, infection_deck_path, player_deck_path):
         inf_file.close()
 
         player_deck = {}
-        player_file = open('Player Deck.txt')
+        player_file = open(player_deck_path)
         for line in player_file.read().splitlines():
             # second element is the number of cards
             player_deck[line.split(',')[0]] = line.split(',')[1]
@@ -198,7 +198,7 @@ def record_game_results(model_name, game_num, status_dict):
     print_gamestr += str(status_dict.get('turns_to_8_cubes_above_pop','N/A')) + ','
 
     epidemic_dict = status_dict.get('epidemic_timing', {})
-    for epidemic_num in range(10):
+    for epidemic_num in range(1,10,1):
         print_gamestr += str(epidemic_dict.get(epidemic_num, 'N/A')) + ','
 
     print_gamestr = print_gamestr.strip(',')
@@ -216,61 +216,61 @@ model_name_1 = 'Baseline'
 infection_deck_1 = 'InfectionDeck.txt'
 player_deck_1 = 'Player Deck.txt'
 execute_game(model_name_1, infection_deck_1, player_deck_1)
-print('Finished Game #1')
+print('Finished Model #1')
 
 model_name_2 = 'Baseline - no hollow men'
 infection_deck_2 = 'InfectionDeckNoHollowMen.txt'
 player_deck_2 = 'Player Deck.txt'
 execute_game(model_name_2, infection_deck_2, player_deck_2)
-print('Finished Game #2')
+print('Finished Model #2')
 
 model_name_3 = 'No Three Card Cities'
 infection_deck_3 = 'InfectionDeckNoThrees.txt'
 player_deck_3 = 'Player Deck.txt'
 execute_game(model_name_3, infection_deck_3, player_deck_3)
-print('Finished Game #3')
+print('Finished Model #3')
 
 model_name_4 = 'No One Card Cities'
 infection_deck_4 = 'InfectionDeckNoOnes.txt'
 player_deck_4 = 'Player Deck.txt'
 execute_game(model_name_4, infection_deck_4, player_deck_4)
-print('Finished Game #4')
+print('Finished Model #4')
 
 model_name_5 = '36 City Cards'
 infection_deck_5 = 'InfectionDeck.txt'
 player_deck_5 = 'Player Deck36Cards.txt'
 execute_game(model_name_5, infection_deck_5, player_deck_5)
-print('Finished Game #5')
+print('Finished Model #5')
 
 model_name_6 = '37 City Cards'
 infection_deck_6 = 'InfectionDeck.txt'
 player_deck_6 = 'Player Deck37Cards.txt'
 execute_game(model_name_6, infection_deck_6, player_deck_6)
-print('Finished Game #6')
+print('Finished Model #6')
 
 model_name_7 = '44 City Cards'
 infection_deck_7 = 'InfectionDeck.txt'
 player_deck_7 = 'Player Deck44Cards.txt'
 execute_game(model_name_7, infection_deck_7, player_deck_7)
-print('Finished Game #7')
+print('Finished Model #7')
 
 model_name_8 = '45 City Cards'
 infection_deck_8 = 'InfectionDeck.txt'
 player_deck_8 = 'Player Deck45Cards.txt'
 execute_game(model_name_8, infection_deck_8, player_deck_8)
-print('Finished Game #8')
+print('Finished Model #8')
 
 model_name_9 = '52 City Cards'
 infection_deck_9 = 'InfectionDeck.txt'
 player_deck_9 = 'Player Deck52Cards.txt'
 execute_game(model_name_9, infection_deck_9, player_deck_9)
-print('Finished Game #9')
+print('Finished Model #9')
 
 model_name_10 = '53 City Cards'
 infection_deck_10 = 'InfectionDeck.txt'
 player_deck_10 = 'Player Deck53Cards.txt'
 execute_game(model_name_10, infection_deck_10, player_deck_10)
-print('Finished Game #10')
+print('Finished Model #10')
 
 #Close Output Files
 city_file.close()

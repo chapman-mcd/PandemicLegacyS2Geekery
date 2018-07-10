@@ -1,4 +1,4 @@
-Epidemic,7
+Epidemic,6
 Produce Supplies x3,2
 Produce Supplies x2,2
 Produce Supplies x1,4
