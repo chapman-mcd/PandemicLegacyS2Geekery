@@ -232,7 +232,7 @@ class PandemicGame(object):
         # flips the infection cards
         cards_to_draw = self.infection_rate_lookup[self.current_infection_level]
         hollow_men_inbound = False
-        for i in range(cards_to_draw):
+        while cards_to_draw > 0:
             # use try in case we are out of cards.
             # if we are out of cards, increase infection rate by 1, shuffle discard on top, and draw again
             try:
@@ -248,6 +248,7 @@ class PandemicGame(object):
                 if not card == 'Hollow Men':
                     self.track_hollow_men_added(card)
                     hollow_men_inbound = False
+                    cards_to_draw += -1
             # if the hollow men are not already in bound
             else:
                 # if this is a hollow men card, set them to inbound and continue
@@ -256,6 +257,7 @@ class PandemicGame(object):
                 # if the hollow men are not inbound and this isn't a hollow men card, track the removed cubes
                 else:
                     self.track_removed_cubes(card)
+                    cards_to_draw += -1
 
 
 
