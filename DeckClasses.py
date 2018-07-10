@@ -84,6 +84,7 @@ class PandemicDeck(object):
 
         random.shuffle(self.discardpile)
         self.drawpile = self.discardpile + self.drawpile
+        self.discardpile = []
 
     def discard_specific(self, card):
         """
